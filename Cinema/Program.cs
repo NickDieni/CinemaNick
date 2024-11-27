@@ -1,5 +1,6 @@
 using CinemaDataModels.Data;
-using CinemaDataModels.Repositories;    
+using CinemaDataModels.Repositories;
+using CinemaDataModels.AutoMapping;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +18,8 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString
 builder.Services.AddScoped<IUserRepository, SQLUserRepository>();
 builder.Services.AddScoped<IPostalCodeRepository, SQLPostalCodeRepository>();
 builder.Services.AddScoped<IGenreRepository, SQLGenreRepository>();
-//builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+builder.Services.AddScoped<IMovieRepository, SQLMovieRepository>();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

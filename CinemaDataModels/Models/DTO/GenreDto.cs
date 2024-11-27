@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CinemaDataModels.Models.Entities;
+using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +12,6 @@ namespace CinemaDataModels.Models.DTO
     {
         public int GenreId { get; set; }
         public string GenreName { get; set; }
+        public List<Movie> Movies { get; set; } = new List<Movie>();
     }
 }

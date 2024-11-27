@@ -6,10 +6,11 @@ namespace CinemaDataModels.Data
 {
     public class CinemaContext : DbContext
     {
-        private readonly DbContextOptions dbContextOptions;
-        public CinemaContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
+        private readonly DbContextOptions<CinemaContext> options;
+
+        public CinemaContext(DbContextOptions<CinemaContext> options) : base(options)
         {
-            this.dbContextOptions = dbContextOptions;
+            this.options = options;
         }
 
         public DbSet<User> Users { get; set; }
@@ -26,29 +27,28 @@ namespace CinemaDataModels.Data
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(e => e.UserName)
-                .HasMaxLength(50).IsRequired();
+                      .HasMaxLength(50).IsRequired();
                 entity.Property(e => e.Password)
-                .HasMaxLength(50).IsRequired();
+                      .HasMaxLength(50).IsRequired();
                 entity.Property(e => e.Email)
-                .HasMaxLength(50).IsRequired();
+                      .HasMaxLength(50).IsRequired();
                 entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("GETDATE()");
+                      .HasDefaultValueSql("GETDATE()");
             });
+
             modelBuilder.Entity<Movie>(entity =>
             {
                 entity.Property(e => e.Rating)
-                .HasPrecision(2, 1);
+                      .HasPrecision(3, 1);
             });
+
             modelBuilder.Entity<PostalCode>(entity =>
             {
                 entity.HasKey(e => e.PostalCodeId);
                 entity.Property(e => e.PostalCodeId)
-                .ValueGeneratedNever();
-            });
-            modelBuilder.Entity<Movie>(entity => 
-            {
-                entity.Property(e => e.Rating).HasPrecision(3, 1);
+                      .ValueGeneratedNever();
             });
         }
     }
 }
+

@@ -2,6 +2,9 @@
 using CinemaDataModels.Data;
 using Microsoft.EntityFrameworkCore;
 using CinemaDataModels.Models.Entities;
+using AutoMapper;
+using CinemaDataModels.Models.DTO;
+using CinemaDataModels.Repositories;
 
 namespace CinemaBackEnd.Controllers
 {
@@ -9,43 +12,92 @@ namespace CinemaBackEnd.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly CinemaContext dbContext;
-        public UsersController(CinemaContext dbContext)
+        private readonly IMapper mapper;
+        private readonly IUserRepository userRepository;
+
+        public UsersController(IMapper mapper, IUserRepository userRepository)
         {
-            this.dbContext = dbContext;
+            this.mapper = mapper;
+            this.userRepository = userRepository;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAllSync()
+        // CREATE User
+        // POST: /api/users
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] AddUserRequestDto addUserRequestDto)
         {
-            var users = await dbContext.Users.ToListAsync();
-            return Ok(users);
+            // Map DTO to Domain Model
+            var userDomainModel = mapper.Map<User>(addUserRequestDto);
+
+            await userRepository.CreateAsync(userDomainModel);
+
+            // Map Domain model to DTO
+            return Ok(mapper.Map<UserDto>(userDomainModel));
         }
 
-        [HttpGet("{id}")]
-        public async Task<User> GetById(int id)
+        // GET User
+        // GET: /api/users
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
         {
-            return await dbContext.Users.FindAsync(id);
+            var usersDomainModel = await userRepository.GetAllAsync();
+
+            // Map Domain Model to DTO
+            return Ok(mapper.Map<List<UserDto>>(usersDomainModel));
         }
-        [HttpPost]
-        public async Task<User> Create(User user)
+
+        // Get User By Id
+        // GET; /api/users/{id}
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
         {
-            dbContext.Users.Add(user);
-            await dbContext.SaveChangesAsync();
-            return user;
+            var userDomainModel = await userRepository.GetByIdAsync(id);
+
+            if (userDomainModel == null)
+            {
+                return NotFound();
+            }
+            // Map Domain Model to DTO
+            return Ok(mapper.Map<UserDto>(userDomainModel));
         }
+
+        // Update User By Id
+        // PUT: /api/users/{id}
         [HttpPut]
-        public async Task<User> Update(User user)
+        [Route("{id:int}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateUserRequestDto updateUserRequestDto)
         {
-            dbContext.Users.Update(user);
-            await dbContext.SaveChangesAsync();
-            return user;
+            // Map DTO to Domain Model
+            var userDomainModel = mapper.Map<User>(updateUserRequestDto);
+
+            userDomainModel = await userRepository.UpdateAsync(id, userDomainModel);
+
+            if (userDomainModel == null)
+            {
+                return NotFound();
+            }
+            // Map Domain Model to DTO
+
+            return Ok(mapper.Map<UserDto>(userDomainModel));
         }
-        [HttpDelete("{id}")]
-        public async Task Delete(int id)
+
+        // Delete User By Id
+        // DELETE: /api/users/{id}
+        [HttpDelete]
+        [Route("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var user = await dbContext.Users.FindAsync(id);
-            dbContext.Users.Remove(user);
-            await dbContext.SaveChangesAsync();
+            var deletedUserDomainModel = await userRepository.DeleteAsync(id);
+            if (deletedUserDomainModel == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(mapper.Map<UserDto>(deletedUserDomainModel));
+
+            // Map Domain Model to DTO
+
         }
     }
 }
