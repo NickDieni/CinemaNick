@@ -11,8 +11,9 @@ namespace CinemaDataModels.Models.Entities
         public int AddressId { get; set; }
         public string Street { get; set; }
         public int StreetNumber { get; set; }
-        public int BuildingNumber { get; set; }
-        public List<PostalCode> PostalCode { get; set; } = new List<PostalCode>();
-        public string Country { get; set; }
+        public int Building { get; set; }
+        public int Floor { get; set; }
+        public string Direction { get; set; }
+        public List<PostalCode> PostalCode { get; set; }
     }
 }

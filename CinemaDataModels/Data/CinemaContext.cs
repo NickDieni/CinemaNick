@@ -21,6 +21,7 @@ namespace CinemaDataModels.Data
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Showtime> Showtimes { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<Address> Addresses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -48,6 +49,11 @@ namespace CinemaDataModels.Data
                 entity.Property(e => e.PostalCodeId)
                       .ValueGeneratedNever();
             });
+            modelBuilder.Entity<Theater>()
+                .HasOne(t => t.Address)
+                .WithOne()
+                .HasForeignKey<Theater>(t => t.AddressId);
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

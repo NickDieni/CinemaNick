@@ -3,8 +3,8 @@
     public class Showtime
     {
         public int ShowtimeId { get; set; }
-        public List<Movie> MovieId { get; set; } = new List<Movie>();
-        public List<Theater> TheaterId { get; set; } = new List<Theater>();
+        public Movie Movie { get; set; }
+        public Theater Theater { get; set; }
         public DateTime ShowtimeStart { get; set; }
 
     }

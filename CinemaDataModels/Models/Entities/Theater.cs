@@ -4,7 +4,8 @@
     {
         public int TheaterId { get; set; }
         public string TheaterName { get; set; }
-        public List<PostalCode> PostalCodeId { get; set; } = new List<PostalCode>();
         public int Capacity { get; set; }
+        public int AddressId { get; set; }
+        public Address Address { get; set; }
     }
 }

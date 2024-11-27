@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CinemaDataModels.Repositories 
+namespace CinemaDataModels.Repositories
 {
     public class SQLMovieRepository : IMovieRepository
     {
