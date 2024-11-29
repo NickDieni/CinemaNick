@@ -1,5 +1,6 @@
 ﻿using CinemaDataModels.Data;
 using CinemaDataModels.Models.Entities;
+using CinemaDataModels.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CinemaDataModels.Repositories
+namespace CinemaDataModels.Repositories.SQLRepository
 {
     public class SQLUserRepository : IUserRepository
     {

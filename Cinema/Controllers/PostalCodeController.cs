@@ -2,7 +2,7 @@
 using CinemaDataModels.Data;
 using AutoMapper;
 using CinemaDataModels.Models.DTO;
-using CinemaDataModels.Repositories;
+using CinemaDataModels.Repositories.IRepository;
 
 namespace CinemaBackEnd.Controllers
 {

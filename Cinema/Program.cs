@@ -1,7 +1,8 @@
 using CinemaDataModels.Data;
-using CinemaDataModels.Repositories;
 using CinemaDataModels.AutoMapping;
 using Microsoft.EntityFrameworkCore;
+using CinemaDataModels.Repositories.IRepository;
+using CinemaDataModels.Repositories.SQLRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 

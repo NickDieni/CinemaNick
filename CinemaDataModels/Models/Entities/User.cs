@@ -7,6 +7,7 @@
         public string Password { get; set; }
         public string Email { get; set; }
         public DateTime CreatedAt { get; set; }
-        public PostalCode PostalCodes { get; set; } = new PostalCode();
+        public PostalCode PostalCode { get; set; }
+        public int PostalCodeId { get; set; }
     }
 }

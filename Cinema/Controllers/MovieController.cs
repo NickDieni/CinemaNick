@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CinemaDataModels.Models.DTO;
 using CinemaDataModels.Models.Entities;
-using CinemaDataModels.Repositories;
+using CinemaDataModels.Repositories.IRepository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaBackEnd.Controllers

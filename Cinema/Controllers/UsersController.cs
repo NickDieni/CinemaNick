@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using CinemaDataModels.Models.Entities;
 using AutoMapper;
 using CinemaDataModels.Models.DTO;
-using CinemaDataModels.Repositories;
+using CinemaDataModels.Repositories.IRepository;
 
 namespace CinemaBackEnd.Controllers
 {

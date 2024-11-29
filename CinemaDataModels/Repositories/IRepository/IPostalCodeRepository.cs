@@ -1,6 +1,6 @@
 ﻿using CinemaDataModels.Models.Entities;
 
-namespace CinemaDataModels.Repositories
+namespace CinemaDataModels.Repositories.IRepository
 {
     public interface IPostalCodeRepository
     {

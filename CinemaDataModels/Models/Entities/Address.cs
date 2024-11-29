@@ -14,6 +14,7 @@ namespace CinemaDataModels.Models.Entities
         public int Building { get; set; }
         public int Floor { get; set; }
         public string Direction { get; set; }
-        public List<PostalCode> PostalCode { get; set; }
+        public PostalCode PostalCode { get; set; }
+        public int PostalCodeId { get; set; }
     }
 }

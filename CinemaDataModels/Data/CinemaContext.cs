@@ -57,7 +57,25 @@ namespace CinemaDataModels.Data
                 entity.Property(e => e.PurchaseDate)
                       .HasDefaultValueSql("GETDATE()");
             });
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.User)
+                .WithOne()
+                .HasForeignKey<Ticket>(t => t.UserId)
+                .OnDelete(DeleteBehavior.Restrict); // Specify OnDelete behavior
 
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.Showtime)
+                .WithOne()
+                .HasForeignKey<Ticket>(t => t.ShowtimeId)
+                .OnDelete(DeleteBehavior.Restrict); // Specify OnDelete behavior
+
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.Seat)
+                .WithOne()
+                .HasForeignKey<Ticket>(t => t.SeatId)
+                .OnDelete(DeleteBehavior.Restrict); // Specify OnDelete behavior
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -40,6 +40,9 @@ namespace CinemaDataModels.Migrations
                     b.Property<int>("Floor")
                         .HasColumnType("int");
 
+                    b.Property<int>("PostalCodeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -47,12 +50,9 @@ namespace CinemaDataModels.Migrations
                     b.Property<int>("StreetNumber")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TheaterId")
-                        .HasColumnType("int");
-
                     b.HasKey("AddressId");
 
-                    b.HasIndex("TheaterId");
+                    b.HasIndex("PostalCodeId");
 
                     b.ToTable("Addresses");
                 });
@@ -92,15 +92,10 @@ namespace CinemaDataModels.Migrations
                     b.Property<DateOnly>("ReleaseDate")
                         .HasColumnType("date");
 
-                    b.Property<int?>("ShowtimeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MovieId");
-
-                    b.HasIndex("ShowtimeId");
 
                     b.ToTable("Movies");
                 });
@@ -110,21 +105,11 @@ namespace CinemaDataModels.Migrations
                     b.Property<int>("PostalCodeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AddressId")
-                        .HasColumnType("int");
-
                     b.Property<string>("PostalName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TheaterId")
-                        .HasColumnType("int");
-
                     b.HasKey("PostalCodeId");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("TheaterId");
 
                     b.ToTable("PostalCodes");
                 });
@@ -143,12 +128,12 @@ namespace CinemaDataModels.Migrations
                     b.Property<int>("SeatNumber")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TicketId")
+                    b.Property<int>("TheaterId")
                         .HasColumnType("int");
 
                     b.HasKey("SeatId");
 
-                    b.HasIndex("TicketId");
+                    b.HasIndex("TheaterId");
 
                     b.ToTable("Seats");
                 });
@@ -161,15 +146,20 @@ namespace CinemaDataModels.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShowtimeId"));
 
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("ShowtimeStart")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("TicketId")
+                    b.Property<int>("TheaterId")
                         .HasColumnType("int");
 
                     b.HasKey("ShowtimeId");
 
-                    b.HasIndex("TicketId");
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("TheaterId");
 
                     b.ToTable("Showtimes");
                 });
@@ -182,13 +172,10 @@ namespace CinemaDataModels.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TheaterId"));
 
+                    b.Property<int>("AddressId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Capacity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SeatId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ShowtimeId")
                         .HasColumnType("int");
 
                     b.Property<string>("TheaterName")
@@ -197,9 +184,8 @@ namespace CinemaDataModels.Migrations
 
                     b.HasKey("TheaterId");
 
-                    b.HasIndex("SeatId");
-
-                    b.HasIndex("ShowtimeId");
+                    b.HasIndex("AddressId")
+                        .IsUnique();
 
                     b.ToTable("Theaters");
                 });
@@ -213,9 +199,29 @@ namespace CinemaDataModels.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketId"));
 
                     b.Property<DateTime>("PurchaseDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("SeatId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShowtimeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("TicketId");
+
+                    b.HasIndex("SeatId")
+                        .IsUnique();
+
+                    b.HasIndex("ShowtimeId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Tickets");
                 });
@@ -243,10 +249,7 @@ namespace CinemaDataModels.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("PostalCodesPostalCodeId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TicketId")
+                    b.Property<int>("PostalCodeId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
@@ -256,9 +259,7 @@ namespace CinemaDataModels.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("PostalCodesPostalCodeId");
-
-                    b.HasIndex("TicketId");
+                    b.HasIndex("PostalCodeId");
 
                     b.ToTable("Users");
                 });
@@ -280,67 +281,92 @@ namespace CinemaDataModels.Migrations
 
             modelBuilder.Entity("CinemaDataModels.Models.Entities.Address", b =>
                 {
-                    b.HasOne("CinemaDataModels.Models.Entities.Theater", null)
-                        .WithMany("AddressId")
-                        .HasForeignKey("TheaterId");
-                });
+                    b.HasOne("CinemaDataModels.Models.Entities.PostalCode", "PostalCode")
+                        .WithMany()
+                        .HasForeignKey("PostalCodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("CinemaDataModels.Models.Entities.Movie", b =>
-                {
-                    b.HasOne("CinemaDataModels.Models.Entities.Showtime", null)
-                        .WithMany("MovieId")
-                        .HasForeignKey("ShowtimeId");
-                });
-
-            modelBuilder.Entity("CinemaDataModels.Models.Entities.PostalCode", b =>
-                {
-                    b.HasOne("CinemaDataModels.Models.Entities.Address", null)
-                        .WithMany("PostalCode")
-                        .HasForeignKey("AddressId");
-
-                    b.HasOne("CinemaDataModels.Models.Entities.Theater", null)
-                        .WithMany("PostalCodeId")
-                        .HasForeignKey("TheaterId");
+                    b.Navigation("PostalCode");
                 });
 
             modelBuilder.Entity("CinemaDataModels.Models.Entities.Seat", b =>
                 {
-                    b.HasOne("CinemaDataModels.Models.Entities.Ticket", null)
-                        .WithMany("SeatId")
-                        .HasForeignKey("TicketId");
+                    b.HasOne("CinemaDataModels.Models.Entities.Theater", "Theater")
+                        .WithMany()
+                        .HasForeignKey("TheaterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Theater");
                 });
 
             modelBuilder.Entity("CinemaDataModels.Models.Entities.Showtime", b =>
                 {
-                    b.HasOne("CinemaDataModels.Models.Entities.Ticket", null)
-                        .WithMany("ShowtimeId")
-                        .HasForeignKey("TicketId");
+                    b.HasOne("CinemaDataModels.Models.Entities.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CinemaDataModels.Models.Entities.Theater", "Theater")
+                        .WithMany()
+                        .HasForeignKey("TheaterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("Theater");
                 });
 
             modelBuilder.Entity("CinemaDataModels.Models.Entities.Theater", b =>
                 {
-                    b.HasOne("CinemaDataModels.Models.Entities.Seat", null)
-                        .WithMany("TheaterId")
-                        .HasForeignKey("SeatId");
+                    b.HasOne("CinemaDataModels.Models.Entities.Address", "Address")
+                        .WithOne()
+                        .HasForeignKey("CinemaDataModels.Models.Entities.Theater", "AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("CinemaDataModels.Models.Entities.Showtime", null)
-                        .WithMany("TheaterId")
-                        .HasForeignKey("ShowtimeId");
+                    b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("CinemaDataModels.Models.Entities.Ticket", b =>
+                {
+                    b.HasOne("CinemaDataModels.Models.Entities.Seat", "Seat")
+                        .WithOne()
+                        .HasForeignKey("CinemaDataModels.Models.Entities.Ticket", "SeatId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CinemaDataModels.Models.Entities.Showtime", "Showtime")
+                        .WithOne()
+                        .HasForeignKey("CinemaDataModels.Models.Entities.Ticket", "ShowtimeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CinemaDataModels.Models.Entities.User", "User")
+                        .WithOne()
+                        .HasForeignKey("CinemaDataModels.Models.Entities.Ticket", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Seat");
+
+                    b.Navigation("Showtime");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CinemaDataModels.Models.Entities.User", b =>
                 {
-                    b.HasOne("CinemaDataModels.Models.Entities.PostalCode", "PostalCodes")
+                    b.HasOne("CinemaDataModels.Models.Entities.PostalCode", "PostalCode")
                         .WithMany()
-                        .HasForeignKey("PostalCodesPostalCodeId")
+                        .HasForeignKey("PostalCodeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CinemaDataModels.Models.Entities.Ticket", null)
-                        .WithMany("UserId")
-                        .HasForeignKey("TicketId");
-
-                    b.Navigation("PostalCodes");
+                    b.Navigation("PostalCode");
                 });
 
             modelBuilder.Entity("GenreMovie", b =>
@@ -356,39 +382,6 @@ namespace CinemaDataModels.Migrations
                         .HasForeignKey("MoviesMovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("CinemaDataModels.Models.Entities.Address", b =>
-                {
-                    b.Navigation("PostalCode");
-                });
-
-            modelBuilder.Entity("CinemaDataModels.Models.Entities.Seat", b =>
-                {
-                    b.Navigation("TheaterId");
-                });
-
-            modelBuilder.Entity("CinemaDataModels.Models.Entities.Showtime", b =>
-                {
-                    b.Navigation("MovieId");
-
-                    b.Navigation("TheaterId");
-                });
-
-            modelBuilder.Entity("CinemaDataModels.Models.Entities.Theater", b =>
-                {
-                    b.Navigation("AddressId");
-
-                    b.Navigation("PostalCodeId");
-                });
-
-            modelBuilder.Entity("CinemaDataModels.Models.Entities.Ticket", b =>
-                {
-                    b.Navigation("SeatId");
-
-                    b.Navigation("ShowtimeId");
-
-                    b.Navigation("UserId");
                 });
 #pragma warning restore 612, 618
         }

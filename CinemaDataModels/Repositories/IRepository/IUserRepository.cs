@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CinemaDataModels.Repositories
+namespace CinemaDataModels.Repositories.IRepository
 {
     public interface IUserRepository
     {

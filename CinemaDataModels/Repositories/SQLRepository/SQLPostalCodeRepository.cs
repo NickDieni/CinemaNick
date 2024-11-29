@@ -6,8 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CinemaDataModels.Repositories.IRepository;
 
-namespace CinemaDataModels.Repositories
+namespace CinemaDataModels.Repositories.SQLRepository
 {
     public class SQLPostalCodeRepository : IPostalCodeRepository
     {

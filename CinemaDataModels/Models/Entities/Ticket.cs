@@ -3,9 +3,12 @@
     public class Ticket
     {
         public int TicketId { get; set; }
-        public User User { get; set; } = new User();
-        public Showtime ShowtimeId { get; set; } = new Showtime();
-        public Seat SeatId { get; set; } = new Seat();
+        public User User { get; set; }
+        public int UserId { get; set; }
+        public Showtime Showtime { get; set; }
+        public int ShowtimeId { get; set; }
+        public Seat Seat { get; set; }
+        public int SeatId { get; set; }
         public DateTime PurchaseDate { get; set; } = DateTime.Now;
 
     }
