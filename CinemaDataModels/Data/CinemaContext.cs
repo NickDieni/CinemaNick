@@ -36,13 +36,11 @@ namespace CinemaDataModels.Data
                 entity.Property(e => e.CreatedAt)
                       .HasDefaultValueSql("GETDATE()");
             });
-
             modelBuilder.Entity<Movie>(entity =>
             {
                 entity.Property(e => e.Rating)
                       .HasPrecision(3, 1);
             });
-
             modelBuilder.Entity<PostalCode>(entity =>
             {
                 entity.HasKey(e => e.PostalCodeId);
@@ -54,6 +52,12 @@ namespace CinemaDataModels.Data
                 .WithOne()
                 .HasForeignKey<Theater>(t => t.AddressId);
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Ticket>(entity =>
+            { 
+                entity.Property(e => e.PurchaseDate)
+                      .HasDefaultValueSql("GETDATE()");
+            });
+
         }
     }
 }

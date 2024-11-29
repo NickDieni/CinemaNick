@@ -3,7 +3,7 @@
     public class Seat
     {
         public int SeatId { get; set; }
-        public List<Theater> TheaterId { get; set; } = new List<Theater>();
+        public Theater TheaterId { get; set; } = new Theater();
         public int RowNumber { get; set; }
         public int SeatNumber { get; set; }
 
