@@ -15,6 +15,7 @@ namespace CinemaBackEnd.Controllers
         private readonly IMapper mapper;
         private readonly IUserRepository userRepository;
 
+        //Dependency injection
         public UsersController(IMapper mapper, IUserRepository userRepository)
         {
             this.mapper = mapper;

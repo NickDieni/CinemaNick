@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CinemaDataModels.Models.DTO
 {
-    public class AddMovieRequest
+    public class AddMovieRequestDto
     {
         public string Title { get; set; }
         public int DurationMinutes { get; set; }

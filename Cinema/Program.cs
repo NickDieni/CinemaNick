@@ -20,16 +20,33 @@ builder.Services.AddScoped<IUserRepository, SQLUserRepository>();
 builder.Services.AddScoped<IPostalCodeRepository, SQLPostalCodeRepository>();
 builder.Services.AddScoped<IGenreRepository, SQLGenreRepository>();
 builder.Services.AddScoped<IMovieRepository, SQLMovieRepository>();
+builder.Services.AddScoped<IAddressRepository, SQLAddressRepository>();
+builder.Services.AddScoped<ISeatRepository, SQLSeatRepository>();
+builder.Services.AddScoped<IShowtimeRepository, SQLShowtimeRepository>();
+builder.Services.AddScoped<ITheaterRepository, SQLTheaterRepository>();
+builder.Services.AddScoped<ITicketRepository, SQLTicketRepository>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyAllowSpecificOrigins",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors("MyAllowSpecificOrigins");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

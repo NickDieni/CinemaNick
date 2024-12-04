@@ -1,4 +1,4 @@
-﻿namespace CinemaDataModels.Models.Entities
+﻿    namespace CinemaDataModels.Models.Entities
 {
     public class PostalCode
     {

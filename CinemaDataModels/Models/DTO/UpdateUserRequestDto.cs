@@ -14,6 +14,6 @@ namespace CinemaDataModels.Models.DTO
         public string Password { get; set; } = null!;
         public string Email { get; set; } = null!;
         public DateTime CreateDate { get; set; }
-        public PostalCode PostalCodes { get; set; } = new PostalCode();
+        public int PostalCodeId { get; set; }
     }
 }

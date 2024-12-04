@@ -21,6 +21,11 @@ namespace CinemaDataModels.AutoMapping
 
             // Movie
             CreateMap<Movie, MovieDto>().ReverseMap();
+            CreateMap<AddMovieRequestDto, Movie>().ReverseMap();
+            CreateMap<UpdateMovieRequestDto, Movie>().ReverseMap();
+
+            // Address
+            CreateMap<Address, AddressDto>().ReverseMap();
         }
     }
 }
