@@ -1,5 +1,10 @@
 ﻿using AutoMapper;
 using CinemaDataModels.Models.DTO;
+using CinemaDataModels.Models.DTO.Sub_Genre;
+using CinemaDataModels.Models.DTO.Sub_Seat;
+using CinemaDataModels.Models.DTO.Sub_Showtime;
+using CinemaDataModels.Models.DTO.Sub_Theater;
+using CinemaDataModels.Models.DTO.Sub_Ticket;
 using CinemaDataModels.Models.Entities;
 
 namespace CinemaDataModels.AutoMapping
@@ -18,6 +23,7 @@ namespace CinemaDataModels.AutoMapping
 
             // Genre
             CreateMap<Genre, GenreDto>().ReverseMap();
+            CreateMap<AddGenreRequestDto, Genre>().ReverseMap();
 
             // Movie
             CreateMap<Movie, MovieDto>().ReverseMap();
@@ -26,6 +32,22 @@ namespace CinemaDataModels.AutoMapping
 
             // Address
             CreateMap<Address, AddressDto>().ReverseMap();
+
+            // Theater
+            CreateMap<Theater, TheaterDto>().ReverseMap();
+            CreateMap<AddTheaterRequestDto, Theater>().ReverseMap();    
+            CreateMap<UpdateTheaterRequestDto, Theater>().ReverseMap();
+
+            // Showtime
+            CreateMap<Showtime, ShowtimeDto>().ReverseMap();
+
+            // Ticket
+            CreateMap<Ticket, TicketDto>().ReverseMap();
+
+            // Seat
+            CreateMap<Seat, SeatDto>().ReverseMap();
+
+            
         }
     }
 }

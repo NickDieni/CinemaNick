@@ -1,5 +1,7 @@
-﻿using CinemaDataModels.Models.Entities;
+﻿using CinemaDataModels.Data;
+using CinemaDataModels.Models.Entities;
 using CinemaDataModels.Repositories.IRepository;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,29 +12,60 @@ namespace CinemaDataModels.Repositories.SQLRepository
 {
     public class SQLTheaterRepository : ITheaterRepository
     {
-        public Task<Theater> AddAsync(Theater theater)
+        private readonly CinemaContext dbContext;
+
+        public SQLTheaterRepository(CinemaContext dbContext)
         {
-            throw new NotImplementedException();
+            this.dbContext = dbContext;
+        }
+        public async Task<Theater> CreateAsync(Theater theater)
+        {
+            await dbContext.Theaters.AddAsync(theater);
+            await dbContext.SaveChangesAsync();
+            return theater;
         }
 
-        public Task<Theater> DeleteAsync(int id)
+        public async Task<Theater?> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var existingTheater = await dbContext.Theaters.FirstOrDefaultAsync(x => x.TheaterId == id);
+
+            if (existingTheater == null)
+            {
+                return null;
+            }
+
+            dbContext.Theaters.Remove(existingTheater); // There is no Async remove in EF at this time.
+            await dbContext.SaveChangesAsync();
+            return existingTheater;
         }
 
-        public Task<List<Theater>> GetAllAsync()
+        public async Task<List<Theater>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await dbContext.Theaters.ToListAsync();
         }
 
-        public Task<Theater?> GetByIdAsync(int id)
+        public async Task<Theater?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await dbContext.Theaters
+                         .FirstOrDefaultAsync(x => x.TheaterId == id);
+
+
         }
 
-        public Task<Theater> UpdateAsync(Theater theater)
+        public async Task<Theater?> UpdateAsync(int id, Theater theater)
         {
-            throw new NotImplementedException();
+            var existingTheater = await dbContext.Theaters.FirstOrDefaultAsync(x => x.TheaterId == id);
+            if (existingTheater == null)
+            {
+                return null;
+            }
+
+            existingTheater.TheaterName = theater.TheaterName;
+            existingTheater.Capacity = theater.Capacity;
+            existingTheater.AddressId = theater.AddressId;
+
+            await dbContext.SaveChangesAsync();
+            return existingTheater;
         }
     }
 }

@@ -9,6 +9,7 @@ namespace CinemaDataModels.Repositories.IRepository
 {
     public interface IGenreRepository
     {
+        Task<Genre> CreateAsync(Genre genre);
         Task<List<Genre>> GetAllAsync();
         Task<Genre?> GetByIdAsync(int id);
     }

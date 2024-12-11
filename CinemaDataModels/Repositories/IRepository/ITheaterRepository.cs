@@ -9,10 +9,10 @@ namespace CinemaDataModels.Repositories.IRepository
 {
     public interface ITheaterRepository
     {
+        Task<Theater> CreateAsync(Theater theater);
         Task<List<Theater>> GetAllAsync();
         Task<Theater?> GetByIdAsync(int id);
-        Task<Theater> AddAsync(Theater theater);
-        Task<Theater> UpdateAsync(Theater theater);
-        Task<Theater> DeleteAsync(int id);
+        Task<Theater?> UpdateAsync(int id, Theater user);
+        Task<Theater?> DeleteAsync(int id);
     }
 }

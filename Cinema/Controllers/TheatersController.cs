@@ -1,164 +1,105 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using CinemaDataModels.Data;
+using Microsoft.EntityFrameworkCore;
 using CinemaDataModels.Models.Entities;
+using AutoMapper;
+using CinemaDataModels.Models.DTO;
+using CinemaDataModels.Repositories.IRepository;
+using CinemaDataModels.Models.DTO.Sub_Theater;
 
 namespace CinemaBackEnd.Controllers
 {
-    public class TheatersController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class TheatersController : ControllerBase
     {
-        private readonly CinemaContext _context;
+        private readonly IMapper mapper;
+        private readonly ITheaterRepository theaterRepository;
 
-        public TheatersController(CinemaContext context)
+        //Dependency injection
+        public TheatersController(IMapper mapper, ITheaterRepository theaterRepository)
         {
-            _context = context;
+            this.mapper = mapper;
+            this.theaterRepository = theaterRepository;
         }
-
-        // GET: Theaters
-        public async Task<IActionResult> Index()
-        {
-            var cinemaContext = _context.Theaters.Include(t => t.Address);
-            return View(await cinemaContext.ToListAsync());
-        }
-
-        // GET: Theaters/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var theater = await _context.Theaters
-                .Include(t => t.Address)
-                .FirstOrDefaultAsync(m => m.TheaterId == id);
-            if (theater == null)
-            {
-                return NotFound();
-            }
-
-            return View(theater);
-        }
-
-        // GET: Theaters/Create
-        public IActionResult Create()
-        {
-            ViewData["AddressId"] = new SelectList(_context.Addresses, "AddressId", "Direction");
-            return View();
-        }
-
-        // POST: Theaters/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // CREATE Theater
+        // POST: /api/theaters
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TheaterId,TheaterName,Capacity,AddressId")] Theater theater)
+        public async Task<IActionResult> Create([FromBody] AddTheaterRequestDto addTheaterRequestDto)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(theater);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["AddressId"] = new SelectList(_context.Addresses, "AddressId", "Direction", theater.AddressId);
-            return View(theater);
+            // Map DTO to Domain Model
+            var theaterDomainModel = mapper.Map<Theater>(addTheaterRequestDto);
+
+            await theaterRepository.CreateAsync(theaterDomainModel);
+
+            // Map Domain model to DTO
+            return Ok(mapper.Map<TheaterDto>(theaterDomainModel));
         }
 
-        // GET: Theaters/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET Theater
+        // GET: /api/theaters
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
         {
-            if (id == null)
+            var theaterDomainModel = await theaterRepository.GetAllAsync();
+
+            // Map Domain Model to DTO
+            return Ok(mapper.Map<List<UserDto>>(theaterDomainModel));
+        }
+
+        // Get Theater By Id
+        // GET; /api/theaters/{id}
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var theaterDomainModel = await theaterRepository.GetByIdAsync(id);
+
+            if (theaterDomainModel == null)
+            {
+                return NotFound();
+            }
+            // Map Domain Model to DTO
+            return Ok(mapper.Map<UserDto>(theaterDomainModel));
+        }
+
+        // Update Theater By Id
+        // PUT: /api/theaters/{id}
+        [HttpPut]
+        [Route("{id:int}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateTheaterRequestDto updateTheaterRequestDto)
+        {
+            // Map DTO to Domain Model
+            var theaterDomainModel = mapper.Map<Theater>(updateTheaterRequestDto);
+
+            theaterDomainModel = await theaterRepository.UpdateAsync(id, theaterDomainModel);
+
+            if (theaterDomainModel == null)
+            {
+                return NotFound();
+            }
+            // Map Domain Model to DTO
+
+            return Ok(mapper.Map<TheaterDto>(theaterDomainModel));
+        }
+
+        // Delete Theater By Id
+        // DELETE: /api/theaters/{id}
+        [HttpDelete]
+        [Route("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var deletedTheaterDomainModel = await theaterRepository.DeleteAsync(id);
+            if (deletedTheaterDomainModel == null)
             {
                 return NotFound();
             }
 
-            var theater = await _context.Theaters.FindAsync(id);
-            if (theater == null)
-            {
-                return NotFound();
-            }
-            ViewData["AddressId"] = new SelectList(_context.Addresses, "AddressId", "Direction", theater.AddressId);
-            return View(theater);
-        }
+            return Ok(mapper.Map<TheaterDto>(deletedTheaterDomainModel));
 
-        // POST: Theaters/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TheaterId,TheaterName,Capacity,AddressId")] Theater theater)
-        {
-            if (id != theater.TheaterId)
-            {
-                return NotFound();
-            }
+            // Map Domain Model to DTO
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(theater);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TheaterExists(theater.TheaterId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["AddressId"] = new SelectList(_context.Addresses, "AddressId", "Direction", theater.AddressId);
-            return View(theater);
-        }
-
-        // GET: Theaters/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var theater = await _context.Theaters
-                .Include(t => t.Address)
-                .FirstOrDefaultAsync(m => m.TheaterId == id);
-            if (theater == null)
-            {
-                return NotFound();
-            }
-
-            return View(theater);
-        }
-
-        // POST: Theaters/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var theater = await _context.Theaters.FindAsync(id);
-            if (theater != null)
-            {
-                _context.Theaters.Remove(theater);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool TheaterExists(int id)
-        {
-            return _context.Theaters.Any(e => e.TheaterId == id);
         }
     }
 }

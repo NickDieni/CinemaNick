@@ -30,5 +30,11 @@ namespace CinemaDataModels.Repositories.SQLRepository
 
 
         }
+        public async Task<Genre> CreateAsync(Genre genre)
+        {
+            await dbContext.Genres.AddAsync(genre);
+            await dbContext.SaveChangesAsync();
+            return genre;
+        }
     }
 }

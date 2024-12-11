@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using CinemaDataModels.Models.DTO;
+using CinemaDataModels.Models.DTO.Sub_Genre;
+using CinemaDataModels.Models.Entities;
 using CinemaDataModels.Repositories.IRepository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,6 +45,18 @@ namespace CinemaBackEnd.Controllers
                 return NotFound();
             }
             // Map Domain Model to DTO
+            return Ok(mapper.Map<GenreDto>(genreDomainModel));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] AddGenreRequestDto addGenreRequestDto)
+        {
+            // Map DTO to Domain Model
+            var genreDomainModel = mapper.Map<Genre>(addGenreRequestDto);
+
+            await genreRepository.CreateAsync(genreDomainModel);
+
+            // Map Domain model to DTO
             return Ok(mapper.Map<GenreDto>(genreDomainModel));
         }
     }
