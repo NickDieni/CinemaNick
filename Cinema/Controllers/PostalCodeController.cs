@@ -3,6 +3,9 @@ using CinemaDataModels.Data;
 using AutoMapper;
 using CinemaDataModels.Models.DTO;
 using CinemaDataModels.Repositories.IRepository;
+using CinemaDataModels.Models.DTO.Sub_Genre;
+using CinemaDataModels.Models.Entities;
+using CinemaDataModels.Models.DTO.Sub_PostalCode;
 
 namespace CinemaBackEnd.Controllers
 {
@@ -44,6 +47,17 @@ namespace CinemaBackEnd.Controllers
                 return NotFound();
             }
             // Map Domain Model to DTO
+            return Ok(mapper.Map<PostalCodeDto>(postalCodeDomainModel));
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] AddPostCodeRequestDto addPostCodeRequestDto)
+        {
+            // Map DTO to Domain Model
+            var postalCodeDomainModel = mapper.Map<PostalCode>(addPostCodeRequestDto);
+
+            await postalCodeRepository.CreateAsync(postalCodeDomainModel);
+
+            // Map Domain model to DTO
             return Ok(mapper.Map<PostalCodeDto>(postalCodeDomainModel));
         }
     }

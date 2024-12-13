@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using CinemaDataModels.Models.DTO;
+using CinemaDataModels.Models.DTO.Sub_Address;
 using CinemaDataModels.Models.DTO.Sub_Genre;
 using CinemaDataModels.Models.DTO.Sub_Seat;
 using CinemaDataModels.Models.DTO.Sub_Showtime;
 using CinemaDataModels.Models.DTO.Sub_Theater;
 using CinemaDataModels.Models.DTO.Sub_Ticket;
+using CinemaDataModels.Models.DTO.Sub_PostalCode;
 using CinemaDataModels.Models.Entities;
 
 namespace CinemaDataModels.AutoMapping
@@ -20,6 +22,7 @@ namespace CinemaDataModels.AutoMapping
 
             // PostalCode
             CreateMap<PostalCode, PostalCodeDto>().ReverseMap();
+            CreateMap<AddPostCodeRequestDto, PostalCode>().ReverseMap();
 
             // Genre
             CreateMap<Genre, GenreDto>().ReverseMap();
@@ -32,6 +35,8 @@ namespace CinemaDataModels.AutoMapping
 
             // Address
             CreateMap<Address, AddressDto>().ReverseMap();
+            CreateMap<AddAddressRequestDto, Address>().ReverseMap();
+            CreateMap<UpdateAddressRequestDto, Address>().ReverseMap();
 
             // Theater
             CreateMap<Theater, TheaterDto>().ReverseMap();

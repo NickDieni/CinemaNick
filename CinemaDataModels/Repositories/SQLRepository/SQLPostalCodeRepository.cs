@@ -27,9 +27,12 @@ namespace CinemaDataModels.Repositories.SQLRepository
         {
             return await dbContext.PostalCodes
                          .FirstOrDefaultAsync(x => x.PostalCodeId == id);
-
-
         }
-
+        public async Task<PostalCode> CreateAsync(PostalCode postalCode)
+        {
+            await dbContext.PostalCodes.AddAsync(postalCode);
+            await dbContext.SaveChangesAsync();
+            return postalCode;
+        }
     }
 }
