@@ -22,16 +22,17 @@ namespace Cinema.API.Controllers
         // CREATE Movie
         // POST: /api/movie
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] AddMovieRequestDto addMovieRequestdto)
+        public async Task<IActionResult> Create([FromBody] AddMovieRequestDto addMovieRequestDto)
         {
-            // Map DTO to Domain Model
-            var movieDomainModel = mapper.Map<Movie>(addMovieRequestdto);
-
-            await movieRepository.CreateAsync(movieDomainModel);
+            // Create the movie using the repository
+            var movieDomainModel = await movieRepository.CreateAsync(addMovieRequestDto);
 
             // Map Domain model to DTO
-            return Ok(mapper.Map<MovieDto>(movieDomainModel));
+            var movieDto = mapper.Map<MovieDto>(movieDomainModel);
+
+            return Ok(movieDto);
         }
+
 
         // GET Movie
         // GET: /api/movie

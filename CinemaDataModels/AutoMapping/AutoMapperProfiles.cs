@@ -51,8 +51,8 @@ namespace CinemaDataModels.AutoMapping
 
             // Seat
             CreateMap<Seat, SeatDto>().ReverseMap();
+            CreateMap<AddSeatRequestDto, Seat>().ReverseMap();
 
-            
         }
     }
 }

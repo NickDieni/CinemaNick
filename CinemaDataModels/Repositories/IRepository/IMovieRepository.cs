@@ -1,4 +1,5 @@
-﻿using CinemaDataModels.Models.Entities;
+﻿using CinemaDataModels.Models.DTO;
+using CinemaDataModels.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace CinemaDataModels.Repositories.IRepository
 {
     public interface IMovieRepository
     {
-        Task<Movie> CreateAsync(Movie movie);
+        Task<Movie> CreateAsync(AddMovieRequestDto addMovieRequestDto);
         Task<List<Movie>> GetAllAsync();
         Task<Movie?> GetByIdAsync(int id);
         Task<Movie?> UpdateAsync(int id, Movie movie);

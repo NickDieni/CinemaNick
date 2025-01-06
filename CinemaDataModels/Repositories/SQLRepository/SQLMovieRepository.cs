@@ -1,4 +1,5 @@
 ﻿using CinemaDataModels.Data;
+using CinemaDataModels.Models.DTO;
 using CinemaDataModels.Models.Entities;
 using CinemaDataModels.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore;
@@ -18,8 +19,26 @@ namespace CinemaDataModels.Repositories.SQLRepository
         {
             this.dbContext = dbContext;
         }
-        public async Task<Movie> CreateAsync(Movie movie)
+        public async Task<Movie> CreateAsync(AddMovieRequestDto addMovieRequestDto)
         {
+            var movie = new Movie
+            {
+                Title = addMovieRequestDto.Title,
+                DurationMinutes = addMovieRequestDto.DurationMinutes,
+                Rating = addMovieRequestDto.Rating,
+                ReleaseDate = addMovieRequestDto.ReleaseDate,
+                Genres = new List<Genre>()
+            };
+
+            foreach (var genreId in addMovieRequestDto.GenreIds)
+            {
+                var genre = await dbContext.Genres.FindAsync(genreId);
+                if (genre != null)
+                {
+                    movie.Genres.Add(genre);
+                }
+            }
+
             await dbContext.Movies.AddAsync(movie);
             await dbContext.SaveChangesAsync();
             return movie;
