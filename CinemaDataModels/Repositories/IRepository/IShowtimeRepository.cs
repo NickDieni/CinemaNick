@@ -11,8 +11,7 @@ namespace CinemaDataModels.Repositories.IRepository
     {
         Task<List<Showtime>> GetAllAsync();
         Task<Showtime?> GetByIdAsync(int id);
-        Task<Showtime> AddAsync(Showtime showtime);
-        Task<Showtime> UpdateAsync(Showtime showtime);
+        Task<Showtime> CreateAsync(Showtime showtime);
         Task<Showtime> DeleteAsync(int id);
     }
 }

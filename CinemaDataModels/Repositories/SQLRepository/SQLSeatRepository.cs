@@ -25,24 +25,28 @@ namespace CinemaDataModels.Repositories.SQLRepository
             await dbContext.SaveChangesAsync();
             return seat;
         }
-        public Task<Seat> AddAsync(Seat seat)
+        public async Task<Seat?> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var existingSeat = await dbContext.Seats.FirstOrDefaultAsync(x => x.SeatId == id);
+
+            if (existingSeat == null)
+            {
+                return null;
+            }
+
+            dbContext.Seats.Remove(existingSeat); // There is no Async remove in EF at this time.
+            await dbContext.SaveChangesAsync();
+            return existingSeat;
         }
 
-        public Task<Seat> DeleteAsync(int id)
+        public async Task<List<Seat>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await dbContext.Seats.ToListAsync();
         }
 
-        public Task<List<Seat>> GetAllAsync()
+        public async Task<Seat?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<Seat?> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
+            return await dbContext.Seats.FirstOrDefaultAsync(x => x.SeatId == id);
         }
     }
 }

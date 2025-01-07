@@ -15,10 +15,6 @@ namespace CinemaDataModels.AutoMapping
     {
         public AutoMapperProfiles()
         {
-            // Users
-            CreateMap<UpdateUserRequestDto, User>().ReverseMap();
-            CreateMap<AddUserRequestDto, User>().ReverseMap();
-            CreateMap<User, UserDto>().ReverseMap();
 
             // PostalCode
             CreateMap<PostalCode, PostalCodeDto>().ReverseMap();
@@ -45,14 +41,20 @@ namespace CinemaDataModels.AutoMapping
 
             // Showtime
             CreateMap<Showtime, ShowtimeDto>().ReverseMap();
+            CreateMap<AddShowTimeRequestDto, Showtime>().ReverseMap();
 
             // Ticket
             CreateMap<Ticket, TicketDto>().ReverseMap();
+            CreateMap<AddTicketRequestDto, Ticket>().ReverseMap();
 
             // Seat
             CreateMap<Seat, SeatDto>().ReverseMap();
             CreateMap<AddSeatRequestDto, Seat>().ReverseMap();
 
+            // Users
+            CreateMap<UpdateUserRequestDto, User>().ReverseMap();
+            CreateMap<AddUserRequestDto, User>().ReverseMap();
+            CreateMap<User, UserDto>().ReverseMap();
         }
     }
 }

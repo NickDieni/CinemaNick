@@ -76,12 +76,16 @@ namespace CinemaDataModels.Data
                 .OnDelete(DeleteBehavior.Restrict); // Specify OnDelete behavior
 
             modelBuilder.Entity<Movie>()
-            .HasMany(m => m.Genres)
-            .WithMany(g => g.Movies)
-            .UsingEntity<Dictionary<string, object>>(
-                "GenreMovie",
-                j => j.HasOne<Genre>().WithMany().HasForeignKey("GenreId"),
-                j => j.HasOne<Movie>().WithMany().HasForeignKey("MovieId"));
+                .HasMany(m => m.Genres)
+                .WithMany(g => g.Movies)
+                .UsingEntity<Dictionary<string, object>>(
+                    "GenreMovie",
+                    j => j.HasOne<Genre>().WithMany().HasForeignKey("GenreId"),
+                    j => j.HasOne<Movie>().WithMany().HasForeignKey("MovieId"),
+                    j =>
+                    {
+                        j.HasKey("GenreId", "MovieId");
+                    });
 
 
             base.OnModelCreating(modelBuilder);

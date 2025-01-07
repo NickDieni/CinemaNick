@@ -11,8 +11,7 @@ namespace CinemaDataModels.Repositories.IRepository
     {
         Task<List<Ticket>> GetAllAsync();
         Task<Ticket?> GetByIdAsync(int id);
-        Task<Ticket> AddAsync(Ticket ticket);
-        Task<Ticket> UpdateAsync(Ticket ticket);
+        Task<Ticket> CreateAsync(Ticket ticket);
         Task<Ticket> DeleteAsync(int id);
     }
 }
