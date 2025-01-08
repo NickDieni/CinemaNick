@@ -21,11 +21,13 @@ namespace CinemaDataModels.AutoMapping
             CreateMap<AddPostCodeRequestDto, PostalCode>().ReverseMap();
 
             // Genre
-            CreateMap<Genre, GenreDto>().ReverseMap();
+            CreateMap<Genre, GenreDto>()
+                .ForMember(dest => dest.Movies, opt => opt.Ignore());
             CreateMap<AddGenreRequestDto, Genre>().ReverseMap();
 
             // Movie
-            CreateMap<Movie, MovieDto>().ReverseMap();
+            CreateMap<Movie, MovieDto>()
+                .ForMember(dest => dest.Genres, opt => opt.Ignore());
             CreateMap<AddMovieRequestDto, Movie>().ReverseMap();
             CreateMap<UpdateMovieRequestDto, Movie>().ReverseMap();
 

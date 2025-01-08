@@ -3,18 +3,22 @@ using CinemaDataModels.AutoMapping;
 using Microsoft.EntityFrameworkCore;
 using CinemaDataModels.Repositories.IRepository;
 using CinemaDataModels.Repositories.SQLRepository;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<CinemaContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
-
 
 builder.Services.AddScoped<IUserRepository, SQLUserRepository>();
 builder.Services.AddScoped<IPostalCodeRepository, SQLPostalCodeRepository>();
@@ -37,7 +41,6 @@ builder.Services.AddCors(options =>
         });
 });
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 
