@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace CinemaDataModels.Repositories.IRepository
 {
+    //Interface is used for test and to make sure that whatever is in
+    //SQLRepository matches with together, for example CreateAsync needs to be the same each place 
     public interface IAddressRepository 
     {
         Task<Address> CreateAsync(Address address);

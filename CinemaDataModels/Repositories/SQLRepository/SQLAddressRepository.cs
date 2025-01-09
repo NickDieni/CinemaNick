@@ -12,8 +12,10 @@ namespace CinemaDataModels.Repositories.SQLRepository
 {
     public class SQLAddressRepository : IAddressRepository
     {
+        //Dependency injection sammen med constructoren
         private readonly CinemaContext dbContext;
 
+        //Contstuctor for the SQLAddressRepository
         public SQLAddressRepository(CinemaContext dbContext)
         {
             this.dbContext = dbContext;
