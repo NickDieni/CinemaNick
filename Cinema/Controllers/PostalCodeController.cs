@@ -60,5 +60,20 @@ namespace CinemaBackEnd.Controllers
             // Map Domain model to DTO
             return Ok(mapper.Map<PostalCodeDto>(postalCodeDomainModel));
         }
+        [HttpDelete]
+        [Route("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var deletedPostalCodeDomainModel = await postalCodeRepository.DeleteAsync(id);
+            if (deletedPostalCodeDomainModel == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(mapper.Map<PostalCodeDto>(deletedPostalCodeDomainModel));
+
+            // Map Domain Model to DTO
+
+        }
     }
 }

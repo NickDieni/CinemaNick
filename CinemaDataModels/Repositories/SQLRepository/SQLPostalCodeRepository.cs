@@ -34,5 +34,18 @@ namespace CinemaDataModels.Repositories.SQLRepository
             await dbContext.SaveChangesAsync();
             return postalCode;
         }
+        public async Task<PostalCode?> DeleteAsync(int id)
+        {
+            var existingPostalCode = await dbContext.PostalCodes.FirstOrDefaultAsync(x => x.PostalCodeId == id);
+
+            if (existingPostalCode == null)
+            {
+                return null;
+            }
+
+            dbContext.PostalCodes.Remove(existingPostalCode); // There is no Async remove in EF at this time.
+            await dbContext.SaveChangesAsync();
+            return existingPostalCode;
+        }
     }
 }

@@ -7,6 +7,6 @@ namespace CinemaDataModels.Repositories.IRepository
         Task<List<PostalCode>> GetAllAsync();
         Task<PostalCode?> GetByIdAsync(int id);
         Task<PostalCode> CreateAsync(PostalCode postalCode);
-
+        Task<PostalCode> DeleteAsync(int id);
     }
 }
