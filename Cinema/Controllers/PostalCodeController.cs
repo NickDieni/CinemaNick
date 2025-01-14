@@ -26,12 +26,12 @@ namespace CinemaBackEnd.Controllers
         // GET: /api/PostalCode
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<List<PostalCodeDto>>> GetAll()
         {
             var postalCodesDomainModel = await postalCodeRepository.GetAllAsync();
 
             // Map Domain Model to DTO
-            return Ok(mapper.Map<List<PostalCodeDto>>(postalCodesDomainModel));
+             return Ok(mapper.Map<List<PostalCodeDto>>(postalCodesDomainModel));
         }
 
         // Get PostalCode By Id
