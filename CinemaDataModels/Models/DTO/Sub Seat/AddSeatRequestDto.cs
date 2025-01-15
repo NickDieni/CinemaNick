@@ -9,7 +9,6 @@ namespace CinemaDataModels.Models.DTO.Sub_Seat
 {
     public class AddSeatRequestDto
     {
-        public Theater Theater { get; set; }
         public int TheaterId { get; set; }
         public int RowNumber { get; set; }
         public int SeatNumber { get; set; }
