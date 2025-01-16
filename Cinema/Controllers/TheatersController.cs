@@ -45,7 +45,7 @@ namespace CinemaBackEnd.Controllers
             var theaterDomainModel = await theaterRepository.GetAllAsync();
 
             // Map Domain Model to DTO
-            return Ok(mapper.Map<List<UserDto>>(theaterDomainModel));
+            return Ok(mapper.Map<List<TheaterDto>>(theaterDomainModel));
         }
 
         // Get Theater By Id
@@ -61,7 +61,7 @@ namespace CinemaBackEnd.Controllers
                 return NotFound();
             }
             // Map Domain Model to DTO
-            return Ok(mapper.Map<UserDto>(theaterDomainModel));
+            return Ok(mapper.Map<TheaterDto>(theaterDomainModel));
         }
 
         // Update Theater By Id
